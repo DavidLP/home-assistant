@@ -80,7 +80,7 @@ class ILightSln(Light, RestoreEntity):
     async def async_added_to_hass(self):
         """Handle entity about to be added to hass event."""
         await super().async_added_to_hass()
-        last_state = await async_get_last_state(self.hass, self.entity_id)
+        last_state = await self.async_get_last_state()
         if last_state:
             self._light.on = (last_state.state == STATE_ON)
             self._light.available = not (last_state.state == STATE_UNAVAILABLE)
