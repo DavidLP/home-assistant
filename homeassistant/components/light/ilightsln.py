@@ -13,7 +13,7 @@ from homeassistant.const import CONF_HOST, CONF_PORT, STATE_ON, STATE_UNAVAILABL
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS, ATTR_COLOR_TEMP, SUPPORT_BRIGHTNESS, SUPPORT_WHITE_VALUE, SUPPORT_COLOR_TEMP, Light, PLATFORM_SCHEMA)
 import homeassistant.helpers.config_validation as cv
-from homeassistant.helpers.restore_state import async_get_last_state
+from homeassistant.helpers.restore_state import RestoreEntity
 
 REQUIREMENTS = ['ilightsln==0.0.1']
 
@@ -69,7 +69,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
     async_add_entities([ILightSln(l) for l in gateway.lights])
 
 
-class ILightSln(Light):
+class ILightSln(Light, RestoreEntity):
     """Representation of a ILightSln light """
 
     def __init__(self, light):
@@ -79,6 +79,7 @@ class ILightSln(Light):
 
     async def async_added_to_hass(self):
         """Handle entity about to be added to hass event."""
+        await super().async_added_to_hass()
         last_state = await async_get_last_state(self.hass, self.entity_id)
         if last_state:
             self._light.on = (last_state.state == STATE_ON)
