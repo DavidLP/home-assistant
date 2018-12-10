@@ -83,7 +83,7 @@ class ILightSln(Light, RestoreEntity):
         last_state = await self.async_get_last_state()
         if last_state:
             self._light.on = (last_state.state == STATE_ON)
-            self._light.brightness = last_state.attributes.get('brightness')
+            self._light.brightness = last_state.attributes.get('brightness', self._light._gateway._MAX_BRIGHTNESS)
             # self._light.temperature = last_state.attributes.get('color_temp')
 
     @property
