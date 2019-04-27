@@ -1,0 +1,10 @@
+{
+  "domain": "ilightsln",
+  "name": "ilightsln",
+  "documentation": "https://www.home-assistant.io/components/limitlessled",
+  "requirements": [
+    "ilightsln==0.0.1"
+  ],
+  "dependencies": [],
+  "codeowners": []
+}

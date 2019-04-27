@@ -9,13 +9,11 @@ import logging
 
 import voluptuous as vol
 
-from homeassistant.const import CONF_HOST, CONF_PORT, STATE_ON, STATE_UNAVAILABLE
+from homeassistant.const import CONF_HOST, CONF_PORT, STATE_ON
 from homeassistant.components.light import (
-    ATTR_BRIGHTNESS, ATTR_COLOR_TEMP, SUPPORT_BRIGHTNESS, SUPPORT_WHITE_VALUE, SUPPORT_COLOR_TEMP, Light, PLATFORM_SCHEMA)
+    ATTR_BRIGHTNESS, SUPPORT_BRIGHTNESS, SUPPORT_WHITE_VALUE, Light, PLATFORM_SCHEMA)
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.restore_state import RestoreEntity
-
-REQUIREMENTS = ['ilightsln==0.0.1']
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,21 +22,6 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
     vol.Optional(CONF_PORT, default=50000): cv.positive_int,
 })
-
-
-# PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-#     vol.Required(CONF_HOST): cv.string,
-#     vol.Optional(CONF_PORT, default=50000): cv.port,
-#     vol.Required(CONF_LIGHTS):  vol.All(cv.ensure_list, [
-#         {
-#             vol.Required(CONF_NAME): cv.string,
-#             vol.Optional(CONF_TYPE, default=DEFAULT_LED_TYPE):
-#                 vol.In(LED_TYPE),
-#             vol.Required(CONF_NUMBER): cv.positive_int,
-#             vol.Optional(CONF_FADE, default=DEFAULT_FADE): cv.boolean,
-#         }
-#     ]),
-# })
 
 LED_TYPE = ['dimmer',  # on/off/dimmable
             'white'  # on/off/dimmable/white value
@@ -89,7 +72,9 @@ class ILightSln(Light, RestoreEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return self._light.available
+        return True
+        # FIXME: recover from unavailable takes too long
+        # return self._light.available
 
     @property
     def name(self):
